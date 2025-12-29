@@ -1,0 +1,144 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>Document Details</span>
+</mat-toolbar>
+
+<div class="details-container" *ngIf="!loading && document">
+  <mat-card class="details-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="file-icon">description</mat-icon>
+      <mat-card-title>{{ document.title }}</mat-card-title>
+      <mat-card-subtitle>{{ document.fileName }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="info-section">
+        <h3>Description</h3>
+        <p>{{ document.description || 'No description provided' }}</p>
+      </div>
+
+      <div class="info-section">
+        <h3>Document Information</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon>storage</mat-icon>
+            <div>
+              <label>File Size</label>
+              <span>{{ formatFileSize(document.fileSize) }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>insert_drive_file</mat-icon>
+            <div>
+              <label>File Type</label>
+              <span>{{ document.fileType }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>person</mat-icon>
+            <div>
+              <label>Uploaded By</label>
+              <span>{{ document.uploadedBy?.name }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>access_time</mat-icon>
+            <div>
+              <label>Upload Date</label>
+              <span>{{ document.createdAt | date:'medium' }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>update</mat-icon>
+            <div>
+              <label>Last Modified</label>
+              <span>{{ document.updatedAt | date:'medium' }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>history</mat-icon>
+            <div>
+              <label>Version</label>
+              <span>v{{ document.currentVersion }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section" *ngIf="document.tags.length > 0">
+        <h3>Tags</h3>
+        <div class="tags">
+          <mat-chip *ngFor="let tag of document.tags">{{ tag }}</mat-chip>
+        </div>
+      </div>
+
+      <mat-expansion-panel *ngIf="document.versions.length > 0">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>history</mat-icon>
+            Version History ({{ document.versions.length }})
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <mat-list>
+          <mat-list-item *ngFor="let version of document.versions">
+            <mat-icon matListItemIcon>folder</mat-icon>
+            <div matListItemTitle>Version {{ version.version }}</div>
+            <div matListItemLine>{{ version.uploadedAt | date:'medium' }}</div>
+            <button mat-icon-button (click)="$event.stopPropagation()">
+              <mat-icon>download</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>security</mat-icon>
+            Permissions
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        
+        <div class="permissions-section">
+          <div *ngIf="document.permissions.viewAccess.length > 0">
+            <h4>View Access</h4>
+            <mat-chip *ngFor="let user of document.permissions.viewAccess">
+              {{ user.name }}
+            </mat-chip>
+          </div>
+
+          <div *ngIf="document.permissions.editAccess.length > 0">
+            <h4>Edit Access</h4>
+            <mat-chip *ngFor="let user of document.permissions.editAccess">
+              {{ user.name }}
+            </mat-chip>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="downloadDocument()">
+        <mat-icon>download</mat-icon>
+        Download
+      </button>
+      <button mat-raised-button color="warn" (click)="deleteDocument()" *ngIf="canEdit()">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<div class="loading-spinner" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+  <p>Loading document...</p>
+</div>
