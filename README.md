@@ -6,6 +6,13 @@ A full-stack Document Management System built with the MEAN stack (MongoDB, Expr
 ![License](https://img.shields.io/badge/License-MIT-blue)
 
 ---
+## 📸 Screenshots
+
+### Register Page
+![Register Page](./screenshots/register.png)
+
+### Login Page
+![Login Page](./screenshots/login.png)
 
 ## 🚀 Features
 
