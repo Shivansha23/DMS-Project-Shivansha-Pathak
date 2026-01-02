@@ -20,7 +20,7 @@ A full-stack Document Management System built with the MEAN stack (MongoDB, Expr
 ### Dashboard
 ![Login Page](./screenshots/dashboard.png)
 
-![Login Page](./screenshots/docdetails.png)
+
 
 ## 🚀 Features
 
